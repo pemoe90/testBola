@@ -4,9 +4,10 @@
   <script type="text/javascript" src="funciones.js"></script>
   <link rel="stylesheet" href="./estilo.css" type="text/css" media="all" />
 </head>
-<body>
+<body onkeydown="pararBolasTeclado(event)">
 
-<button class="button" type="button" onclick="empezar()">Empezar</button>
+<button class="button" id="BotonEmpezar" type="button" onclick="empezar()">Empezar!</button>
+<button class="button" id="BotonReiniciar" type="button" onclick="reiniciar()">Reinicar</button>
 
 <div class="Fondo" id="Fondo1"></div>
 <div class="Fondo" id="Fondo2"></div>

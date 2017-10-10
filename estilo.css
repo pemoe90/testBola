@@ -60,6 +60,7 @@
   animation-duration: 2s;
   animation-play-state: paused;
   animation-fill-mode: forwards;
+  animation-timing-function: linear;
 }
 
 #Circulo2{
@@ -68,6 +69,7 @@
   animation-duration: 2s;
   animation-play-state: paused;
   animation-fill-mode: forwards;
+  animation-timing-function: linear;
 }
 
 #Fondo1{
@@ -88,6 +90,14 @@
 #Objetivo2{
   top: 75%;
   left: 20%;
+}
+
+#BotonEmpezar{
+  z-index: 1;
+}
+
+#BotonReiniciar{
+  z-index: -1;
 }
 
 @keyframes movimiento {
