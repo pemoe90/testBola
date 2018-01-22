@@ -1,105 +1,112 @@
-*{
-  margin: 0;
-  padding: 0;
-  border: 0 none;
+* {
+    margin: 0;
+    padding: 0;
+    border: 0 none;
 }
 
-.button{
-  top: 50%;
-  left: 50%;
-  position: absolute;
+.button {
+    top: 50%;
+    left: 50%;
+    position: absolute;
 }
 
-.Fondo{
+.Fondo {
     width: 100%;
     height: 50%;
     position: absolute;
     z-index: -5;
 }
 
-.Rectangulo{
-  width: 25%;
-  height: 10%;
-  left: 10%;
-  background-color: red;
-  position: absolute;
-  z-index: 0;
+.Rectangulo {
+    width: 35vw;
+    height: 10vh;
+    left: 10%;
+    background-color: red;
+    position: absolute;
+    z-index: 0;
 }
 
-.Circulo{
-  height: 10vh;
-  width: 10vh;
-  left: 80%;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
-  background: blue;
-  position: absolute;
-  z-index: -1;
+.Circulo {
+    height: 10vh;
+    width: 10vh;
+    left: 80%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    background: blue;
+    position: absolute;
+    z-index: -1;
 }
 
-.Objetivo{
-  height: 10%;
-  width: 5px;
-  position: absolute;
-  z-index: 4;
-  background-color: #2EFE2E;
+.Objetivo {
+    height: 10%;
+    width: 5px;
+    position: absolute;
+    z-index: 4;
+    background-color: #2EFE2E;
 }
 
 #Rectangulo1 {
     top: 25%;
 }
 
-#Rectangulo2{
-  top: 75%;
+#Rectangulo2 {
+    top: 75%;
 }
 
-#Circulo1{
-  top: 25%;
-  animation: movimiento;
-  animation-duration: 2s;
-  animation-play-state: paused;
-  animation-fill-mode: forwards;
-  animation-timing-function: linear;
+#Circulo1 {
+    top: 25%;
+    animation: movimiento;
+    animation-duration: 2s;
+    animation-play-state: paused;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
 }
 
-#Circulo2{
-  top: 75%;
-  animation: movimiento;
-  animation-duration: 2s;
-  animation-play-state: paused;
-  animation-fill-mode: forwards;
-  animation-timing-function: linear;
+#Circulo2 {
+    top: 75%;
+    animation: movimiento;
+    animation-duration: 2s;
+    animation-play-state: paused;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
 }
 
-#Fondo1{
-  top: 0px;
-  background-color: #8A0868;
+#Fondo1 {
+    top: 0px;
+    background-color: #8A0868;
 }
 
-#Fondo2{
-  top: 50vh;
-  background-color: #DF7401;
+#Fondo2 {
+    top: 50vh;
+    background-color: #DF7401;
 }
 
-#Objetivo1{
-  top: 25%;
-  left: 30%;
+#Objetivo1 {
+    top: 25%;
+    left: 30%;
 }
 
-#Objetivo2{
-  top: 75%;
-  left: 20%;
+#Objetivo2 {
+    top: 75%;
+    left: 20%;
 }
 
-#BotonEmpezar{
-  z-index: 1;
+#BotonEmpezar {
+    z-index: 1;
 }
 
-#BotonReiniciar{
-  z-index: -1;
+#BotonReiniciar {
+    z-index: -1;
+}
+
+#CambioBola1 {
+    top: 25%;
+    left: 25%;
 }
 
 @keyframes movimiento {
-  to {left: 2%;}
+    to {
+        left: 2%;
+    }
 }

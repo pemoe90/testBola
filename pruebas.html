@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script type="text/javascript">
+      function cambio(val){
+        document.getElementById("sliderStatus").innerHTML = val;
+      }
+    </script>
+  </head>
+  <body>
+    <input type="range" min="0" max="100" value="50" step="10" oninput="cambio(this.value)" />
+    <br /> <br />
+    Slider = <span id="sliderStatus">50</span>
+  </body>
+</html>
