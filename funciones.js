@@ -4,8 +4,9 @@ var puntos = {
 };
 
 //funcion prueba
-function myFunction() {
-    alert("Hola");
+function prueba() {
+	document.getElementById("Circulo1").style.animationDuration = 15 + "s";
+    document.getElementById("Circulo1").style.animationPlayState = "running";
 }
 
 function empezar() {
@@ -115,8 +116,10 @@ function calcularTam(puntos, tamRectangulo){
 	return resultado;
 }
 
+//funcion suma los puntos totales
 function sumaPuntos(){
 	if(document.getElementById("Circulo1").style.webkitAnimationPlayState == "paused" && document.getElementById("Circulo2").style.webkitAnimationPlayState == "paused"){
+		console.log(puntos.puntos1 + puntos.puntos2);
 		return (puntos.puntos1 + puntos.puntos2);
 	}
 }

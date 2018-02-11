@@ -2,17 +2,18 @@
 <html>
 
 <head>
-    <script type="text/javascript" src="funciones.js"></script>
+    <script type="text/javascript" src="simple.js"></script>
     <link rel="stylesheet" href="./estilo.css" type="text/css" media="all" />
 </head>
 
 <body onkeydown="pararBolasTeclado(event)">
 
+	<!--
     <div id="Opciones">
         <input id="CambioBola1" type="range" min="-5" max="5" step="0.5" value="0" oninput="cambiarBola1(this.value)" />
         <input id="CambioBola2" type="range" min="-5" max="5" step="0.5" value="0" oninput="cambiarBola2(this.value)" />
     </div>
-
+-->
 
     <div id="General">
         <button class="button" id="BotonEmpezar" type="button" onclick="empezar()">Empezar</button>
@@ -21,8 +22,8 @@
         <div class="Fondo" id="Fondo1"></div>
         <div class="Fondo" id="Fondo2"></div>
 
-        <div class="Rectangulo" id="Rectangulo1" onclick="detenerBola1()"></div>
-        <div class="Rectangulo" id="Rectangulo2" onclick="detenerBola2()"></div>
+        <div class="Rectangulo" id="Rectangulo1" onclick="detenerBola(Circulo1)"></div>
+        <div class="Rectangulo" id="Rectangulo2" onclick="detenerBola(Circulo2)"></div>
 
         <div class="Circulo" id="Circulo1"></div>
         <div class="Circulo" id="Circulo2"></div>
