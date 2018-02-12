@@ -7,11 +7,10 @@ var controlador ={
 	estado: false, // false si el juego no ha empezado, true si ha comenzado a moverse
 };
 
+
 function empezar(){
 	cambiarEstado();
-	moverObjetivos();
 	eliminarEmpezar();
-	emitirSonido();
 	animacionBola("Circulo1");
 	animacionBola("Circulo2");
 }
@@ -32,18 +31,20 @@ function moverObjetivos() {
     aux = Math.floor((Math.random() * 16) + 15); //entre 15 y 30
     document.getElementById("Objetivo1").style.left = aux + "%";
     aux = Math.floor((Math.random() * 16) + 15);
-    document.getElementById("Objetivo2").style.left = aux + "%";
+	document.getElementById("Objetivo2").style.left = aux + "%";
+	cronometro();
 }
 
 //funcion para parar las bolas con teclado:
-
 function pararBolasTeclado(event) {
-    var tecla = event.keyCode;
-    if (tecla == 87 || tecla == 38) {
-        detenerBola("Circulo1");
-    } else if (tecla == 83 || tecla == 40) {
-        detenerBola("Circulo2");
-    }
+	var tecla = event.keyCode;
+	if(controlador.estado){
+		if (tecla == 87 || tecla == 38) {
+			detenerBola("Circulo1");
+		} else if (tecla == 83 || tecla == 40) {
+			detenerBola("Circulo2");
+		}
+	}
 }
 
 function animacionBola(idCirculo){
@@ -124,3 +125,34 @@ function sumaPuntos(){
 }
 
 
+var tiempo = 3;
+
+function cronometro(){
+	clearTimeout();
+	var imagen = document.getElementById("imagenCronometro");
+	if(tiempo == 3){
+		imagen.src = "3.png";
+	}
+
+	else if(tiempo == 2){
+		imagen.src = "2.png";
+	}
+	
+	else if (tiempo == 1){
+		imagen.src = "1.png";
+	}
+
+	tiempo--;
+	
+	if(tiempo >= 0){
+		console.log(tiempo);
+		setTimeout(cronometro, 1000);
+	}
+
+	if(tiempo == -1){
+		imagen.parentNode.removeChild(imagen);
+		empezar();
+	}
+
+	
+}

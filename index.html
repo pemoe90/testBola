@@ -8,15 +8,8 @@
 
 <body onkeydown="pararBolasTeclado(event)">
 
-	<!--
-    <div id="Opciones">
-        <input id="CambioBola1" type="range" min="-5" max="5" step="0.5" value="0" oninput="cambiarBola1(this.value)" />
-        <input id="CambioBola2" type="range" min="-5" max="5" step="0.5" value="0" oninput="cambiarBola2(this.value)" />
-    </div>
--->
-
     <div id="General">
-        <button class="button" id="BotonEmpezar" type="button" onclick="empezar()">Empezar</button>
+        <button class="button" id="BotonEmpezar" type="button" onclick="moverObjetivos()">Empezar</button>
         <button class="button" id="BotonReiniciar" type="button" onclick="reiniciar()">Reinicar</button>
 
         <div class="Fondo" id="Fondo1"></div>
@@ -30,6 +23,10 @@
 
         <div class="Objetivo" id="Objetivo1"></div>
         <div class="Objetivo" id="Objetivo2"></div>
+
+		<div id="Cronometro">
+			<img id="imagenCronometro">
+		</div>
     </div>
 </body>
 

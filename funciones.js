@@ -10,6 +10,7 @@ function prueba() {
 }
 
 function empezar() {
+	cronometro();
     moverObjetivos();
     animacionBola();
 }
@@ -122,4 +123,12 @@ function sumaPuntos(){
 		console.log(puntos.puntos1 + puntos.puntos2);
 		return (puntos.puntos1 + puntos.puntos2);
 	}
+}
+
+function cronometro(){
+	console.log("Hola");
+	var imagen = document.createElement("img");
+	imagen.src = "3.png";
+	var div = document.getElementById("Cronometro");
+	div.appendChild(imagen);
 }
