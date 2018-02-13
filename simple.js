@@ -10,7 +10,6 @@ var controlador ={
 
 function empezar(){
 	cambiarEstado();
-	eliminarEmpezar();
 	animacionBola("Circulo1");
 	animacionBola("Circulo2");
 }
@@ -40,9 +39,9 @@ function pararBolasTeclado(event) {
 	var tecla = event.keyCode;
 	if(controlador.estado){
 		if (tecla == 87 || tecla == 38) {
-			detenerBola("Circulo1");
+			detenerBola(Circulo1);
 		} else if (tecla == 83 || tecla == 40) {
-			detenerBola("Circulo2");
+			detenerBola(Circulo2);
 		}
 	}
 }
@@ -60,23 +59,15 @@ function animacionBola(idCirculo){
 
 //Elimina el boton empezar 
 function eliminarEmpezar(){
-	document.getElementById("BotonEmpezar").style.zIndex = -1;
-    document.getElementById("BotonReiniciar").style.zIndex = 1;
 
 	var boton = document.getElementById("BotonEmpezar");
     boton.parentNode.removeChild(boton);
 }
 
-function reiniciar(){
-	window.location.reload();
-}
-
 function detenerBola(idCirculo){
 	var idCirculo = String(idCirculo.id);
-	console.log("Parado");
 	var circulo = document.getElementById(idCirculo);
 	if(controlador.estado){
-		console.log("Movimiento");
 		circulo.style.webkitAnimationPlayState = "paused";
 		circulo.style.zIndex = 1;
 		if(idCirculo == "Circulo1"){
@@ -118,12 +109,29 @@ function calcularTam(puntos, tamRectangulo){
 
 function sumaPuntos(){
 	if(document.getElementById("Circulo1").style.webkitAnimationPlayState == "paused" && document.getElementById("Circulo2").style.webkitAnimationPlayState == "paused"){
+		crearReiniciar();
+		
 		console.log("puntos1: " + puntos.puntos1);
 		console.log("puntos2: " + puntos.puntos2);
 		return (puntos.puntos1 + puntos.puntos2);
 	}
 }
 
+//Crea el boton reiniciar con sus atributos
+function crearReiniciar(){
+	var boton = document.createElement("button");
+	boton.type = "button";
+	boton.style.position = "absolute";
+	boton.style.top = "50%";
+	boton.style.left = "50%";
+	boton.textContent = "Reiniciar";
+	boton.onclick = function() {
+		console.log("REiniciar");
+		window.location.reload();
+	}
+
+	document.body.appendChild(boton);
+}
 
 var tiempo = 3;
 
@@ -131,25 +139,29 @@ function cronometro(){
 	clearTimeout();
 	var imagen = document.getElementById("imagenCronometro");
 	if(tiempo == 3){
+		eliminarEmpezar();
 		imagen.src = "3.png";
+		emitirSonido();
 	}
 
 	else if(tiempo == 2){
 		imagen.src = "2.png";
+		emitirSonido();
 	}
 	
 	else if (tiempo == 1){
 		imagen.src = "1.png";
+		emitirSonido();
 	}
 
 	tiempo--;
 	
 	if(tiempo >= 0){
-		console.log(tiempo);
 		setTimeout(cronometro, 1000);
 	}
 
 	if(tiempo == -1){
+		emitirSonido();
 		imagen.parentNode.removeChild(imagen);
 		empezar();
 	}
