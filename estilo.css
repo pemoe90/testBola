@@ -47,7 +47,7 @@
 
 .Objetivo {
     height: 10%;
-    width: 5px;
+    width: 2.5px;
     position: absolute;
     z-index: 4;
     background-color: #2EFE2E;
@@ -55,9 +55,10 @@
 
 .Cronometro{
     position: absolute;
-    z-index: 4;
+    z-index: 0;
     left: 50%;
-    top: 25%;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 #Rectangulo1 {

@@ -1,4 +1,4 @@
-var puntos = {
+var puntosTotales = {
 	puntos1: 0,
 	puntos2: 0,
 };
@@ -87,21 +87,61 @@ function calcularPuntos(idCirculo, idRectangulo, idObjetivo){
 	var objetivo = document.getElementById(idObjetivo);
 	var rectangulo = document.getElementById(idRectangulo);
 	var pivoteCirculo = circulo.offsetLeft + circulo.offsetWidth/2; //calcula el punto medio del circulo
-	if(pivoteCirculo > rectangulo.offsetLeft && pivoteCirculo < rectangulo.offsetLeft + rectangulo.offsetWidth){ //si el ciculo esta dentro del rectangulo
-		if(idCirculo == "Circulo1"){
-			puntos.puntos1 = Math.abs(objetivo.offsetLeft -  pivoteCirculo);
-			puntos.puntos1 = calcularTam (puntos.puntos1, rectangulo.offsetLeft + rectangulo.offsetWidth);
+	var puntos = 0;
+	var coordenadasRectangulo = rectangulo.getBoundingClientRect(); //guarda las coordenadas del rectangulo
+	if(pivoteCirculo > rectangulo.offsetLeft && pivoteCirculo < tamRectangulo.right){ //si el ciculo esta dentro del rectangulo
+		// el circulo esta justo en el objetivo
+		if(pivoteCirculo == objetivo.offsetLeft){
+			puntos = 100;
+		}
+		
+		//el circulo esta a la derecha del objetivo
+		else if(pivoteCirculo > objetivo.offsetLeft){
+			//se pasan como argumentos:
+			// Distancia que queda entre el objetivo y el punto medio del circulo
+			// Distancia que hay entre el objetivo y la parte derecha del rectangulo
+			puntos = calcularTam(pivoteCirculo - objetivo.offsetLeft, coordenadasRectangulo.right - objetivo.offsetLeft);
 		}
 
-		if(idCirculo == "Circulo2"){
+		//el circulo esta a la izquierda del objetivo
+		else if(pivoteCirculo < objetivo.offsetLeft){
+			puntos = calcularTam(objetivo.offsetLeft - pivoteCirculo, objetivo.offsetLeft - coordenadasRectangulo.left); 
+		}
+		
+
+
+		if(idCirculo == "Circulo1"){
+			/*
+			puntos.puntos1 = Math.abs(objetivo.offsetLeft -  pivoteCirculo);
+			puntos.puntos1 = calcularTam (puntos.puntos1, rectangulo.offsetLeft + rectangulo.offsetWidth);
+
+			//prueba medidas
+			//var tamRectangulo = rectangulo.offsetWidth;
+			var tamRectangulo = rectangulo.getBoundingClientRect();
+			console.log(rectangulo.offsetLeft);
+			console.log(tamRectangulo.left);
+			*/
+
+			puntosTotales.puntos1 = puntos; 
+			console.log("puntos: "+ puntos);
+
+		}
+
+		else if(idCirculo == "Circulo2"){
+			/*
 			puntos.puntos2 = Math.abs(objetivo.offsetLeft -  pivoteCirculo);
 			puntos.puntos2 = calcularTam (puntos.puntos2, rectangulo.offsetLeft + rectangulo.offsetWidth);
+			*/
+			 puntosTotales.puntos2 = puntos;
 		}
 	}
 }
 
-function calcularTam(puntos, tamRectangulo){
-	var resultado = (puntos * 100)/tamRectangulo;
+
+function calcularTam(distancia, tamRectangulo){
+	console.log("distancia: " + distancia);
+	console.log("tamREctangulo: " + tamRectangulo);
+	var resultado = (distancia * 100)/tamRectangulo;
 	resultado = parseInt(resultado);
 	resultado = 100 - resultado;
 	return resultado;
@@ -111,9 +151,9 @@ function sumaPuntos(){
 	if(document.getElementById("Circulo1").style.webkitAnimationPlayState == "paused" && document.getElementById("Circulo2").style.webkitAnimationPlayState == "paused"){
 		crearReiniciar();
 		
-		console.log("puntos1: " + puntos.puntos1);
-		console.log("puntos2: " + puntos.puntos2);
-		return (puntos.puntos1 + puntos.puntos2);
+		console.log("puntos1: " + puntosTotales.puntos1);
+		console.log("puntos2: " + puntosTotales.puntos2);
+		return (puntosTotales.puntos1 + puntosTotales.puntos2);
 	}
 }
 
@@ -126,7 +166,6 @@ function crearReiniciar(){
 	boton.style.left = "50%";
 	boton.textContent = "Reiniciar";
 	boton.onclick = function() {
-		console.log("REiniciar");
 		window.location.reload();
 	}
 
@@ -165,6 +204,4 @@ function cronometro(){
 		imagen.parentNode.removeChild(imagen);
 		empezar();
 	}
-
-	
 }
