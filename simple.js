@@ -14,18 +14,13 @@ function empezar(){
 	animacionBola("Circulo2");
 }
 
-function emitirSonido(){
-	var audio = new Audio("start.ogg");
-	audio.play();
-}
-
 function cambiarEstado(){
 	controlador.estado = true;
 }
 
 //funcion para mover a un lugar aleatorio los objetivos
 function moverObjetivos() {
-    //Math.floor(Math.random()*(max-min+1)+min);
+	//Math.floor(Math.random()*(max-min+1)+min);
     var aux = 0; //variable para guardar un numero aleatorio
     aux = Math.floor((Math.random() * 16) + 15); //entre 15 y 30
     document.getElementById("Objetivo1").style.left = aux + "%";
@@ -47,14 +42,21 @@ function pararBolasTeclado(event) {
 }
 
 function animacionBola(idCirculo){
-	
-	var aux = Math.floor((Math.random() * 10) + 3);
 	var circulo = document.getElementById(idCirculo);
-	
-	circulo.style.webkitAnimationDuration  = aux + "s";
+	var tiempo = Math.floor((Math.random() * 10) + 3);
+	//1229 son los px donde se encuentra el circulo en tamaño completo a 1080p de resolucion
+
+	//se toma como estandar la velocidad de la bola y se ajusta el tiempo para que tenga la misma velocidad con la nueva distancia
+	console.log("Tiempo1 " + tiempo);
+	var vel = 1229/tiempo; //px/s que recorre la bola a la resolucion estandar
+	tiempo = circulo.offsetLeft/vel; //calculamos el nuevo tiempo teniendo en cuenta la velocidad estandar y la nueva distancia
+	console.log("tiempo2 " + tiempo);	
+
+	circulo.style.webkitAnimationDuration  = tiempo + "s";
+	circulo.style.animationDuration = tiempo + "s";
 
 	circulo.style.webkitAnimationPlayState = "running";
-	
+	circulo.style.animationPlayState = "running";
 }
 
 //Elimina el boton empezar 
@@ -89,7 +91,7 @@ function calcularPuntos(idCirculo, idRectangulo, idObjetivo){
 	var pivoteCirculo = circulo.offsetLeft + circulo.offsetWidth/2; //calcula el punto medio del circulo
 	var puntos = 0;
 	var coordenadasRectangulo = rectangulo.getBoundingClientRect(); //guarda las coordenadas del rectangulo
-	if(pivoteCirculo > rectangulo.offsetLeft && pivoteCirculo < tamRectangulo.right){ //si el ciculo esta dentro del rectangulo
+	if(pivoteCirculo > rectangulo.offsetLeft && pivoteCirculo < coordenadasRectangulo.right){ //si el ciculo esta dentro del rectangulo
 		// el circulo esta justo en el objetivo
 		if(pivoteCirculo == objetivo.offsetLeft){
 			puntos = 100;
@@ -111,27 +113,10 @@ function calcularPuntos(idCirculo, idRectangulo, idObjetivo){
 
 
 		if(idCirculo == "Circulo1"){
-			/*
-			puntos.puntos1 = Math.abs(objetivo.offsetLeft -  pivoteCirculo);
-			puntos.puntos1 = calcularTam (puntos.puntos1, rectangulo.offsetLeft + rectangulo.offsetWidth);
-
-			//prueba medidas
-			//var tamRectangulo = rectangulo.offsetWidth;
-			var tamRectangulo = rectangulo.getBoundingClientRect();
-			console.log(rectangulo.offsetLeft);
-			console.log(tamRectangulo.left);
-			*/
-
 			puntosTotales.puntos1 = puntos; 
-			console.log("puntos: "+ puntos);
-
 		}
 
 		else if(idCirculo == "Circulo2"){
-			/*
-			puntos.puntos2 = Math.abs(objetivo.offsetLeft -  pivoteCirculo);
-			puntos.puntos2 = calcularTam (puntos.puntos2, rectangulo.offsetLeft + rectangulo.offsetWidth);
-			*/
 			 puntosTotales.puntos2 = puntos;
 		}
 	}
@@ -139,8 +124,6 @@ function calcularPuntos(idCirculo, idRectangulo, idObjetivo){
 
 
 function calcularTam(distancia, tamRectangulo){
-	console.log("distancia: " + distancia);
-	console.log("tamREctangulo: " + tamRectangulo);
 	var resultado = (distancia * 100)/tamRectangulo;
 	resultado = parseInt(resultado);
 	resultado = 100 - resultado;
@@ -159,38 +142,43 @@ function sumaPuntos(){
 
 //Crea el boton reiniciar con sus atributos
 function crearReiniciar(){
-	var boton = document.createElement("button");
-	boton.type = "button";
-	boton.style.position = "absolute";
-	boton.style.top = "50%";
-	boton.style.left = "50%";
-	boton.textContent = "Reiniciar";
-	boton.onclick = function() {
-		window.location.reload();
-	}
+	if(!document.getElementById("botonReiniciar")){
+		var boton = document.createElement("button");
+		boton.type = "button";
+		boton.id = "botonReiniciar";
+		boton.style.position = "absolute";
+		boton.style.top = "50%";
+		boton.style.left = "50%";
+		boton.textContent = "Reiniciar";
+		boton.onclick = function() {
+			window.location.reload();
+		}
 
-	document.body.appendChild(boton);
+		document.body.appendChild(boton);
+	}
+	
 }
 
 var tiempo = 3;
 
 function cronometro(){
-	clearTimeout();
 	var imagen = document.getElementById("imagenCronometro");
+	var audio = new Audio("start.mp3");
+	
 	if(tiempo == 3){
 		eliminarEmpezar();
 		imagen.src = "3.png";
-		emitirSonido();
+		audio.play();
 	}
 
 	else if(tiempo == 2){
 		imagen.src = "2.png";
-		emitirSonido();
+		audio.play();
 	}
 	
 	else if (tiempo == 1){
 		imagen.src = "1.png";
-		emitirSonido();
+		audio.play();
 	}
 
 	tiempo--;
@@ -200,7 +188,7 @@ function cronometro(){
 	}
 
 	if(tiempo == -1){
-		emitirSonido();
+		audio.play();
 		imagen.parentNode.removeChild(imagen);
 		empezar();
 	}
