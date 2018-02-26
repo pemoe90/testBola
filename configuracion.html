@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+<head>
+    <script type="text/javascript" src="simple.js"></script>
+    <script type="text/javascript" src="configuracion.js"></script>
+    <link rel="stylesheet" href="./estilo.css" type="text/css" media="all" />
+</head>
+
+<body onkeydown="pararBolasTeclado(event)">
+    <div id= "Configuracion">
+        <div id = "ConfiguracionBola1">
+            Configuracion Bola 1 <br>
+            <input type="range" min="-5" max="5" step="0.5" value="0" oninput="modificarTamBola(this.value, Circulo1)" />
+        </div>
+
+        <div id = "ConfiguracionBola2">
+            ConfiguracionBola2<br>
+            <input type="range" min="-5" max="5" step="0.5" value="0" oninput="modificarTamBola(this.value, Circulo2)" />
+        </div>
+
+        <div id = "ConfiguracionRectangulo1">
+            Configuracion rectangulo arriba <br>
+            <input type="range" min="-5" max="5" step="0.5" value="0" oninput="modificarTamRectangulo(this.value, Rectangulo1)" />
+        </div>
+
+        <div id = "ConfiguracionRectangulo2">
+            Configuracion rectangulo abajo <br>
+            <input type="range" min="-5" max="5" step="0.5" value="0" oninput="modificarTamRectangulo(this.value, Rectangulo2)" />
+        </div>
+    </div>
+
+    <div id="General">
+        <button id="BotonConfiguracion" type="button" onclick="configuracion()">Configuración</button>
+        <button class="button" id="BotonEmpezar" type="button" onclick="moverObjetivos()">Empezar</button>
+   
+        <div class="Fondo" id="Fondo1"></div>
+        <div class="Fondo" id="Fondo2"></div>
+
+        <div class="Rectangulo" id="Rectangulo1" onclick="detenerBola(Circulo1)"></div>
+        <div class="Rectangulo" id="Rectangulo2" onclick="detenerBola(Circulo2)"></div>
+
+        <div class="Circulo" id="Circulo1"></div>
+        <div class="Circulo" id="Circulo2"></div>
+
+        <div class="Objetivo" id="Objetivo1"></div>
+        <div class="Objetivo" id="Objetivo2"></div>
+
+		<div class="Cronometro">
+			<img id="imagenCronometro">
+		</div>
+    </div>
+</body>
+
+</html>

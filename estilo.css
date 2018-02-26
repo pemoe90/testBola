@@ -111,16 +111,43 @@
     z-index: 1;
 }
 
-#CambioBola1 {
-    top: 25%;
-    left: 25%;
-}
 
 #imagenCronometro {
     width: 15vh;
 }
 
+#BotonConfiguracion{
+    position: absolute;
+    top: 2%;
+    left: 90%;
+}
 
+#Configuracion{
+    display: inline;
+}
+#ConfiguracionBola1{
+    position: absolute;
+    top: 15%;
+    left: 80%;
+}
+
+#ConfiguracionBola2{
+    position: absolute;
+    top: 65%;
+    left: 80%
+}
+
+#ConfiguracionRectangulo1{
+    position: absolute;
+    top: 15%;
+    left: 25%;
+}
+
+#ConfiguracionRectangulo2{
+    position: absolute;
+    top: 65%;
+    left: 25%;
+}
 
 @keyframes movimiento {
     to {
