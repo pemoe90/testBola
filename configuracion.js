@@ -1,4 +1,13 @@
-function configuracion(){
+/**
+ * @file Archivo con las funciones para la configuración del test
+ * @author Eduardo Pérez Moyano
+ */
+
+ /**
+  * @function configuracion
+  * @description Muestra/oculta el panel de configuración
+  */
+function panelConfiguracion(){
 	var panel = document.getElementById("Configuracion");
 	console.log(panel.style.display);
 	if (panel.style.display == "" || panel.style.display == "inline"){
@@ -11,6 +20,12 @@ function configuracion(){
 	
 }
 
+/**
+ * @function modificarTamBola
+ * @description Modifica el tamaño de la bola
+ * @param {Float} valor 
+ * @param {Id} idCirculo 
+ */
 function modificarTamBola(valor, idCirculo){
     var idCirculo = String(idCirculo.id);
     var circulo = document.getElementById(idCirculo);
@@ -29,6 +44,12 @@ function modificarTamBola(valor, idCirculo){
     objetivo.style.height = tam + "vh";
 }
 
+/**
+ * @function modificarTamRectangulo
+ * @description Modifica el tamaño del rectangulo
+ * @param {Float} valor 
+ * @param {Id} idRectangulo 
+ */
 function modificarTamRectangulo(valor, idRectangulo){
     var idRectangulo = String(idRectangulo.id);
     var rectangulo = document.getElementById(idRectangulo);

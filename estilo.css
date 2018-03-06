@@ -46,7 +46,8 @@
 }
 
 .Objetivo {
-    height: 10%;
+	left: 50%;
+    height: 100%;
     width: 2.5px;
     position: absolute;
     z-index: 4;
@@ -95,16 +96,6 @@
 #Fondo2 {
     top: 50vh;
     background-color: #DF7401;
-}
-
-#Objetivo1 {
-    top: 25%;
-    left: 30%;
-}
-
-#Objetivo2 {
-    top: 75%;
-    left: 20%;
 }
 
 #BotonEmpezar {

@@ -55,12 +55,14 @@ function cambiarEstado(){
  * @description Función para colocar en un lugar aleatorio los objetivos
  */
 function moverObjetivos() {
-	//Math.floor(Math.random()*(max-min+1)+min);
+	//Math.round(Math.random()*(max-min+1)+min);
     var aux = 0; //variable para guardar un numero aleatorio
-    aux = Math.floor((Math.random() * 16) + 15); //entre 15 y 30
-    document.getElementById("Objetivo1").style.left = aux + "%";
-    aux = Math.floor((Math.random() * 16) + 15);
+    aux = Math.round((Math.random() * 60) + 20); //entre 25 y 75
+	document.getElementById("Objetivo1").style.left = aux + "%";
+	console.log("Arriba " + aux);
+    aux = Math.round((Math.random() * 60) + 20);
 	document.getElementById("Objetivo2").style.left = aux + "%";
+	console.log("Abajo " + aux);
 	cronometro();
 }
 
@@ -88,7 +90,7 @@ function pararBolasTeclado(event) {
  */
 function animacionBola(idCirculo){
 	var circulo = document.getElementById(idCirculo);
-	var tiempo = Math.floor((Math.random() * 10) + 3);
+	var tiempo = Math.round((Math.random() * 10) + 3);
 	//1229 son los px donde se encuentra el circulo en tamaño completo a 1920p de resolucion
 
 	//se toma como estandar la velocidad de la bola y se ajusta el tiempo para que tenga la misma velocidad con la nueva distancia
