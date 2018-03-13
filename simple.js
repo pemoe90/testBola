@@ -1,3 +1,4 @@
+
 /**
  * @file Archivo con las funciones para ejecutar el test de velocidad
  * @author Eduardo Pérez Moyano
@@ -14,17 +15,27 @@ var puntosTotales = {
 	puntos2: 0,
 };
 
-/** 
+/**
  * @namespace
- * @prop {bool} estado - estado en el que se encuentra el test
+ * @prop {String} navegador Navegador que se está utilizando
+ * @prop {Bool} estado - Estado en el que se encuentra el test
  * @prop {Integer} tiempoCronometro - Tiempo para que empieze la partida
+ * @prop {Bool} movimientoBola1 La bola superior está en movimiento o no
+ * @prop {Bool} movimientoBola2 La bola inferior está en movimiento o no
 */
 var controlador ={
+	navegador: "", 
 	estado: false, // false si el test no ha empezado, true si ha comenzado a moverse
 	tiempoCronometro: 3,
+	movimientoBola1: false, //false si está quieta
+	movimientoBola2: false,
 };
 
-/** 
+window.onload = function(){
+	controlador.navegador = navegador();
+}
+
+/**
  * @function
  * @name empezar
  * @description Función que inicializa el test
@@ -35,7 +46,7 @@ function empezar(){
 	animacionBola("Circulo2");
 }
 
-/** 
+/**
  * @function
  * @name cambiarEstado
  * @description Función que cambia el estado del controlador
@@ -47,7 +58,7 @@ function cambiarEstado(){
 	else{
 		controlador.estado = false;
 	}
-	
+
 }
 
 /**
@@ -59,10 +70,10 @@ function moverObjetivos() {
     var aux = 0; //variable para guardar un numero aleatorio
     aux = Math.round((Math.random() * 60) + 20); //entre 25 y 75
 	document.getElementById("Objetivo1").style.left = aux + "%";
-	console.log("Arriba " + aux);
+	
     aux = Math.round((Math.random() * 60) + 20);
 	document.getElementById("Objetivo2").style.left = aux + "%";
-	console.log("Abajo " + aux);
+	
 	cronometro();
 }
 
@@ -89,21 +100,89 @@ function pararBolasTeclado(event) {
  * @param  {string} idCirculo
  */
 function animacionBola(idCirculo){
+	var nav = navegador();
 	var circulo = document.getElementById(idCirculo);
+	
 	var tiempo = Math.round((Math.random() * 10) + 3);
+	var pos = Math.floor (circulo.getBoundingClientRect().left);
+	
 	//1229 son los px donde se encuentra el circulo en tamaño completo a 1920p de resolucion
-
+	
 	//se toma como estandar la velocidad de la bola y se ajusta el tiempo para que tenga la misma velocidad con la nueva distancia
-	console.log("Tiempo1 " + tiempo);
+
+	//console.log("Tiempo1 " + tiempo);
+
 	var vel = 1229/tiempo; //px/s que recorre la bola a la resolucion estandar
 	tiempo = circulo.offsetLeft/vel; //calculamos el nuevo tiempo teniendo en cuenta la velocidad estandar y la nueva distancia
-	console.log("tiempo2 " + tiempo);	
+	
+	//console.log("tiempo2 " + tiempo);
 
-	circulo.style.webkitAnimationDuration  = tiempo + "s";
-	circulo.style.animationDuration = tiempo + "s";
+	
+	if(controlador.navegador == "Trident" || controlador.navegador == "MSIE" || controlador.navegador == "Edge"){
+	
+		var pos = Math.floor (circulo.getBoundingClientRect().left);
+		var fin = window.innerWidth*2/100;
+		circulo.style.left = pos + 'px';
+		
+		
 
-	circulo.style.webkitAnimationPlayState = "running";
-	circulo.style.animationPlayState = "running";
+		if(circulo.id == "Circulo1"){
+			controlador.movimientoBola1 = true;
+			var animacion1 = setInterval(moverBola, 100);
+		}
+		else if (circulo.id == "Circulo2"){
+			controlador.movimientoBola2 = true;	
+			var animacion2 = setInterval(moverBola, 200);
+		}
+		
+		
+		
+		function moverBola(){
+			
+			if(circulo.id == "Circulo1"){
+				if((pos <= fin) || controlador.movimientoBola1 == false){
+				
+					clearInterval(animacion1);
+					
+				}
+				else{
+					pos --;
+					circulo.style.left = pos + 'px';
+					
+					
+				}
+			}
+
+			else if (circulo.id == "Circulo2"){
+				if(pos <= fin || controlador.movimientoBola2 == false){
+					clearInterval(animacion2);
+					
+				}
+				else{
+					pos --;
+					circulo.style.left = pos + 'px';
+					
+					
+				}
+			}
+		}
+	}
+	
+	else{
+		/*
+		circulo.style.webkitAnimationDuration  = tiempo + "s";
+		circulo.style.animationDuration = tiempo + "s";
+	
+		circulo.style.webkitAnimationPlayState = "running";
+		circulo.style.animationPlayState = "running";
+		*/
+
+		circulo.style.animationName = "movimiento";
+		circulo.style.animationTimingFunction = "linear";
+		circulo.style.animationDuration = tiempo + "s";
+		circulo.style.animationPlayState = "running";
+	}
+	
 }
 
 /**
@@ -119,24 +198,36 @@ function eliminarEmpezar(){
 /**
  * @function detenerBola
  * @description Función que detiene la bola
- * @param {Id} idCirculo  id de la bola a detener
+ * @param {Div} idCirculo  id de la bola a detener
  */
 function detenerBola(idCirculo){
 	var idCirculo = String(idCirculo.id);
 	var circulo = document.getElementById(idCirculo);
+
 	if(controlador.estado){
-		circulo.style.webkitAnimationPlayState = "paused";
+		if(controlador.navegador == "Trident" || controlador.navegador == "MSIE" || controlador.navegador == "Edge"){
+			if(idCirculo == "Circulo1"){
+				controlador.movimientoBola1 = false;
+			}
+			else if(idCirculo == "Circulo2"){
+				controlador.movimientoBola2 = false;
+			}
+		}
+		else{
+			circulo.style.webkitAnimationPlayState = "paused";
+		}
+
 		circulo.style.zIndex = 1;
 		if(idCirculo == "Circulo1"){
 			calcularPuntos("Circulo1", "Rectangulo1" , "Objetivo1");
 		}
-	
+
 		else if(idCirculo == "Circulo2"){
 			calcularPuntos("Circulo2", "Rectangulo2", "Objetivo2");
 		}
 		sumaPuntos();
 	}
-	
+
 }
 
 /**
@@ -158,7 +249,7 @@ function calcularPuntos(idCirculo, idRectangulo, idObjetivo){
 		if(pivoteCirculo == objetivo.offsetLeft){
 			puntos = 100;
 		}
-		
+
 		//el circulo esta a la derecha del objetivo
 		else if(pivoteCirculo > objetivo.offsetLeft){
 			//se pasan como argumentos:
@@ -169,13 +260,13 @@ function calcularPuntos(idCirculo, idRectangulo, idObjetivo){
 
 		//el circulo esta a la izquierda del objetivo
 		else if(pivoteCirculo < objetivo.offsetLeft){
-			puntos = calcularTam(objetivo.offsetLeft - pivoteCirculo, objetivo.offsetLeft - coordenadasRectangulo.left); 
+			puntos = calcularTam(objetivo.offsetLeft - pivoteCirculo, objetivo.offsetLeft - coordenadasRectangulo.left);
 		}
-		
+
 
 
 		if(idCirculo == "Circulo1"){
-			puntosTotales.puntos1 = puntos; 
+			puntosTotales.puntos1 = puntos;
 		}
 
 		else if(idCirculo == "Circulo2"){
@@ -185,7 +276,7 @@ function calcularPuntos(idCirculo, idRectangulo, idObjetivo){
 }
 
 /**
- * @function calcularTam 
+ * @function calcularTam
  * @description Calcula el tanto por ciento que hay entre la distancia de la bola con el objetivo y el tamaño del rectangulo entre el borde y el objetivo
  * @param  {Integer} distancia Distancia entre el objetivo y la bola
  * @param  {Integer} tamRectangulo Tamaño del rectangulo
@@ -197,22 +288,34 @@ function calcularTam(distancia, tamRectangulo){
 	return resultado;
 }
 
-/** 
+/**
  * @function sumaPuntos
  * @description Suma los puntos conseguidos entre las dos bolas
- * @return {Integer} 
+ * @return {Integer} Puntos totales conseguidos
 */
 function sumaPuntos(){
-	if(document.getElementById("Circulo1").style.webkitAnimationPlayState == "paused" && document.getElementById("Circulo2").style.webkitAnimationPlayState == "paused"){
-		crearReiniciar();
-		
-		console.log("puntos1: " + puntosTotales.puntos1);
-		console.log("puntos2: " + puntosTotales.puntos2);
-		return (puntosTotales.puntos1 + puntosTotales.puntos2);
+	if(controlador.navegador == "Trident" || controlador.navegador == "MSIE" || controlador.navegador == "Edge"){
+		if(controlador.movimientoBola1 == false && controlador.movimientoBola2 == false){
+			crearReiniciar();
+	
+			console.log("puntos1: " + puntosTotales.puntos1);
+			console.log("puntos2: " + puntosTotales.puntos2);
+			return (puntosTotales.puntos1 + puntosTotales.puntos2);
+		}
 	}
+	else{
+		if(document.getElementById("Circulo1").style.webkitAnimationPlayState == "paused" && document.getElementById("Circulo2").style.webkitAnimationPlayState == "paused"){
+			crearReiniciar();
+	
+			console.log("puntos1: " + puntosTotales.puntos1);
+			console.log("puntos2: " + puntosTotales.puntos2);
+			return (puntosTotales.puntos1 + puntosTotales.puntos2);
+		}
+	}
+
 }
 
-/** 
+/**
  * @function crearReiniciar
  * @description Crea el botón reiniciar
 */
@@ -231,18 +334,17 @@ function crearReiniciar(){
 
 		document.body.appendChild(boton);
 	}
-	
+
 }
 
-/** 
+/**
  * @function cronometro
  * @description Ejecuta el cronometro para empezar el test
 */
 function cronometro(){
-	console.log(window.innerWidth);
 	var imagen = document.getElementById("imagenCronometro");
 	var audio = new Audio("start.mp3");
-	
+
 	if(controlador.tiempoCronometro == 3){
 		eliminarEmpezar();
 		imagen.src = "3.png";
@@ -253,14 +355,14 @@ function cronometro(){
 		imagen.src = "2.png";
 		audio.play();
 	}
-	
+
 	else if (controlador.tiempoCronometro == 1){
 		imagen.src = "1.png";
 		audio.play();
 	}
 
 	controlador.tiempoCronometro--;
-	
+
 	if(controlador.tiempoCronometro >= 0){
 		setTimeout(cronometro, 1000);
 	}
@@ -269,5 +371,21 @@ function cronometro(){
 		audio.play();
 		imagen.parentNode.removeChild(imagen);
 		empezar();
+	}
+}
+
+/**
+ * @function navegador
+ * @description Función que comprueba el navegador que se está usando
+ * @return {String} Navegador utilizado
+ */
+function navegador(){
+	var agente = navigator.userAgent;
+	var navegadores = ["Trident", "Edge", "MSIE", "Opera", "Chrome", "Firefox", "Safari"]; //Trident es el nombre de explorer 
+
+	for(i in navegadores){
+		if(agente.indexOf(navegadores[i]) != -1){
+			return navegadores[i];
+		}
 	}
 }

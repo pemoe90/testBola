@@ -71,21 +71,27 @@
 }
 
 #Circulo1 {
+	position: absolute;
     top: 25%;
+    /*
     animation: movimiento;
     animation-duration: 2s;
     animation-play-state: paused;
     animation-fill-mode: forwards;
     animation-timing-function: linear;
+    */
 }
 
 #Circulo2 {
+	position: absolute;
     top: 75%;
+    /*
     animation: movimiento;
     animation-duration: 2s;
     animation-play-state: paused;
     animation-fill-mode: forwards;
     animation-timing-function: linear;
+    */
 }
 
 #Fondo1 {
