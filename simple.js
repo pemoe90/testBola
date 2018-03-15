@@ -104,79 +104,64 @@ function animacionBola(idCirculo){
 	var circulo = document.getElementById(idCirculo);
 	
 	var tiempo = Math.round((Math.random() * 10) + 3);
-	var pos = Math.floor (circulo.getBoundingClientRect().left);
 	
 	//1229 son los px donde se encuentra el circulo en tamaño completo a 1920p de resolucion
 	
 	//se toma como estandar la velocidad de la bola y se ajusta el tiempo para que tenga la misma velocidad con la nueva distancia
 
-	//console.log("Tiempo1 " + tiempo);
+	console.log("Tiempo1 " + tiempo);
 
 	var vel = 1229/tiempo; //px/s que recorre la bola a la resolucion estandar
-	tiempo = circulo.offsetLeft/vel; //calculamos el nuevo tiempo teniendo en cuenta la velocidad estandar y la nueva distancia
+	tiempo = Math.floor(circulo.offsetLeft/vel); //calculamos el nuevo tiempo teniendo en cuenta la velocidad estandar y la nueva distancia
 	
-	//console.log("tiempo2 " + tiempo);
+	console.log("tiempo2 " + tiempo);
 
 	
 	if(controlador.navegador == "Trident" || controlador.navegador == "MSIE" || controlador.navegador == "Edge"){
 	
 		var pos = Math.floor (circulo.getBoundingClientRect().left);
 		var fin = window.innerWidth*2/100;
-		circulo.style.left = pos + 'px';
-		
-		
+		tiempo = Math.floor(tiempo*1000/(pos - fin));
 
 		if(circulo.id == "Circulo1"){
 			controlador.movimientoBola1 = true;
-			var animacion1 = setInterval(moverBola, 100);
+			var animacion1 = setInterval(moverBola1, tiempo);
 		}
 		else if (circulo.id == "Circulo2"){
 			controlador.movimientoBola2 = true;	
-			var animacion2 = setInterval(moverBola, 200);
+			var animacion2 = setInterval(moverBola2, tiempo);
 		}
 		
 		
 		
-		function moverBola(){
-			
-			if(circulo.id == "Circulo1"){
-				if((pos <= fin) || controlador.movimientoBola1 == false){
-				
-					clearInterval(animacion1);
-					
-				}
-				else{
-					pos --;
-					circulo.style.left = pos + 'px';
-					
-					
-				}
+		function moverBola1(){
+
+			if((pos <= fin) || controlador.movimientoBola1 == false){
+				clearInterval(animacion1);
+				controlador.movimientoBola1 = false;
+				sumaPuntos();
+			}
+			else{
+				pos --;
+				circulo.style.left = pos + "px";
+			}
+		}
+
+		function moverBola2(){
+			if((pos <= fin) || controlador.movimientoBola2 == false){
+				clearInterval(animacion2);
+				controlador.movimientoBola2 = false;
+				sumaPuntos();
 			}
 
-			else if (circulo.id == "Circulo2"){
-				if(pos <= fin || controlador.movimientoBola2 == false){
-					clearInterval(animacion2);
-					
-				}
-				else{
-					pos --;
-					circulo.style.left = pos + 'px';
-					
-					
-				}
+			else{
+				pos --;
+				circulo.style.left = pos + "px";
 			}
 		}
 	}
 	
 	else{
-		/*
-		circulo.style.webkitAnimationDuration  = tiempo + "s";
-		circulo.style.animationDuration = tiempo + "s";
-	
-		circulo.style.webkitAnimationPlayState = "running";
-		circulo.style.animationPlayState = "running";
-		*/
-
 		circulo.style.animationName = "movimiento";
 		circulo.style.animationTimingFunction = "linear";
 		circulo.style.animationDuration = tiempo + "s";
