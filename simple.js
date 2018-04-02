@@ -166,6 +166,7 @@ function animacionBola(idCirculo){
 		circulo.style.animationTimingFunction = "linear";
 		circulo.style.animationDuration = tiempo + "s";
 		circulo.style.animationPlayState = "running";
+		circulo.style.animationFillMode = "forwards";
 	}
 	
 }
@@ -282,10 +283,12 @@ function sumaPuntos(){
 	if(controlador.navegador == "Trident" || controlador.navegador == "MSIE" || controlador.navegador == "Edge"){
 		if(controlador.movimientoBola1 == false && controlador.movimientoBola2 == false){
 			crearReiniciar();
-	
+			console.log("Hola");
 			console.log("puntos1: " + puntosTotales.puntos1);
 			console.log("puntos2: " + puntosTotales.puntos2);
-			return (puntosTotales.puntos1 + puntosTotales.puntos2);
+			var puntos = puntosTotales.puntos1 + puntosTotales.puntos2;
+			document.getElementById("Puntos").innerHTML = "Puntos " + puntos;
+			return (puntos);
 		}
 	}
 	else{
@@ -294,10 +297,13 @@ function sumaPuntos(){
 	
 			console.log("puntos1: " + puntosTotales.puntos1);
 			console.log("puntos2: " + puntosTotales.puntos2);
-			return (puntosTotales.puntos1 + puntosTotales.puntos2);
+			var puntos = puntosTotales.puntos1 + puntosTotales.puntos2;
+			document.getElementById("Puntos").innerHTML = "Puntos " + puntos;
+			return (puntos);
 		}
 	}
-
+	
+	
 }
 
 /**
