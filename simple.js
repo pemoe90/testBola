@@ -58,7 +58,6 @@ function cambiarEstado(){
 	else{
 		controlador.estado = false;
 	}
-
 }
 
 /**
@@ -105,18 +104,6 @@ function animacionBola(idCirculo){
 	
 	var tiempo = Math.round((Math.random() * 10) + 3);
 	
-	//1229 son los px donde se encuentra el circulo en tamaño completo a 1920p de resolucion
-	
-	//se toma como estandar la velocidad de la bola y se ajusta el tiempo para que tenga la misma velocidad con la nueva distancia
-
-	console.log("Tiempo1 " + tiempo);
-
-	var vel = 1229/tiempo; //px/s que recorre la bola a la resolucion estandar
-	tiempo = Math.floor(circulo.offsetLeft/vel); //calculamos el nuevo tiempo teniendo en cuenta la velocidad estandar y la nueva distancia
-	
-	console.log("tiempo2 " + tiempo);
-
-	
 	if(controlador.navegador == "Trident" || controlador.navegador == "MSIE" || controlador.navegador == "Edge"){
 	
 		var pos = Math.floor (circulo.getBoundingClientRect().left);
@@ -135,7 +122,6 @@ function animacionBola(idCirculo){
 		
 		
 		function moverBola1(){
-
 			if((pos <= fin) || controlador.movimientoBola1 == false){
 				clearInterval(animacion1);
 				controlador.movimientoBola1 = false;
