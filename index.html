@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html charset=UTF-8">
-	<title>Proyecto</title>
+	<title>Test de anticipación de velocidad</title>
     <script type="text/javascript" src="simple.js"></script>
     <link rel="stylesheet" href="./estilo.css" type="text/css" media="all" />
 </head>
@@ -11,8 +11,8 @@
     <div id="General">
         <button class="button" id="BotonEmpezar" type="button" onclick="moverObjetivos()">Empezar</button>
    
-        <div class="Fondo" id="Fondo1"></div>
-        <div class="Fondo" id="Fondo2"></div>
+        <div class="Fondo" id="Fondo1" onclick="detenerBola(Circulo1)"></div>
+        <div class="Fondo" id="Fondo2" onclick="detenerBola(Circulo2)"></div>
 
         <div class="Rectangulo" id="Rectangulo1" onclick="detenerBola(Circulo1)">
 			<div class="Objetivo" id="Objetivo1"></div>
