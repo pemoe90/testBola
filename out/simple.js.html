@@ -26,7 +26,8 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
+            <pre class="prettyprint source linenums"><code>
+/**
  * @file Archivo con las funciones para ejecutar el test de velocidad
  * @author Eduardo Pérez Moyano
  */
@@ -44,13 +45,23 @@ var puntosTotales = {
 
 /**
  * @namespace
- * @prop {bool} estado - estado en el que se encuentra el test
+ * @prop {String} navegador Navegador que se está utilizando
+ * @prop {Bool} estado - Estado en el que se encuentra el test
  * @prop {Integer} tiempoCronometro - Tiempo para que empieze la partida
+ * @prop {Bool} movimientoBola1 La bola superior está en movimiento o no
+ * @prop {Bool} movimientoBola2 La bola inferior está en movimiento o no
 */
 var controlador ={
+	navegador: "", 
 	estado: false, // false si el test no ha empezado, true si ha comenzado a moverse
 	tiempoCronometro: 3,
+	movimientoBola1: false, //false si está quieta
+	movimientoBola2: false,
 };
+
+window.onload = function(){
+	controlador.navegador = navegador();
+}
 
 /**
  * @function
@@ -75,7 +86,6 @@ function cambiarEstado(){
 	else{
 		controlador.estado = false;
 	}
-
 }
 
 /**
@@ -87,10 +97,10 @@ function moverObjetivos() {
     var aux = 0; //variable para guardar un numero aleatorio
     aux = Math.round((Math.random() * 60) + 20); //entre 25 y 75
 	document.getElementById("Objetivo1").style.left = aux + "%";
-	console.log("Arriba " + aux);
+	
     aux = Math.round((Math.random() * 60) + 20);
 	document.getElementById("Objetivo2").style.left = aux + "%";
-	console.log("Abajo " + aux);
+	
 	cronometro();
 }
 
@@ -117,21 +127,62 @@ function pararBolasTeclado(event) {
  * @param  {string} idCirculo
  */
 function animacionBola(idCirculo){
+	var nav = navegador();
 	var circulo = document.getElementById(idCirculo);
+	
 	var tiempo = Math.round((Math.random() * 10) + 3);
-	//1229 son los px donde se encuentra el circulo en tamaño completo a 1920p de resolucion
+	
+	if(controlador.navegador == "Trident" || controlador.navegador == "MSIE" || controlador.navegador == "Edge"){
+	
+		var pos = Math.floor (circulo.getBoundingClientRect().left);
+		var fin = window.innerWidth*2/100;
+		tiempo = Math.floor(tiempo*1000/(pos - fin));
 
-	//se toma como estandar la velocidad de la bola y se ajusta el tiempo para que tenga la misma velocidad con la nueva distancia
-	console.log("Tiempo1 " + tiempo);
-	var vel = 1229/tiempo; //px/s que recorre la bola a la resolucion estandar
-	tiempo = circulo.offsetLeft/vel; //calculamos el nuevo tiempo teniendo en cuenta la velocidad estandar y la nueva distancia
-	console.log("tiempo2 " + tiempo);
+		if(circulo.id == "Circulo1"){
+			controlador.movimientoBola1 = true;
+			var animacion1 = setInterval(moverBola1, tiempo);
+		}
+		else if (circulo.id == "Circulo2"){
+			controlador.movimientoBola2 = true;	
+			var animacion2 = setInterval(moverBola2, tiempo);
+		}
+		
+		
+		
+		function moverBola1(){
+			if((pos &lt;= fin) || controlador.movimientoBola1 == false){
+				clearInterval(animacion1);
+				controlador.movimientoBola1 = false;
+				sumaPuntos();
+			}
+			else{
+				pos --;
+				circulo.style.left = pos + "px";
+			}
+		}
 
-	circulo.style.webkitAnimationDuration  = tiempo + "s";
-	circulo.style.animationDuration = tiempo + "s";
+		function moverBola2(){
+			if((pos &lt;= fin) || controlador.movimientoBola2 == false){
+				clearInterval(animacion2);
+				controlador.movimientoBola2 = false;
+				sumaPuntos();
+			}
 
-	circulo.style.webkitAnimationPlayState = "running";
-	circulo.style.animationPlayState = "running";
+			else{
+				pos --;
+				circulo.style.left = pos + "px";
+			}
+		}
+	}
+	
+	else{
+		circulo.style.animationName = "movimiento";
+		circulo.style.animationTimingFunction = "linear";
+		circulo.style.animationDuration = tiempo + "s";
+		circulo.style.animationPlayState = "running";
+		circulo.style.animationFillMode = "forwards";
+	}
+	
 }
 
 /**
@@ -152,8 +203,20 @@ function eliminarEmpezar(){
 function detenerBola(idCirculo){
 	var idCirculo = String(idCirculo.id);
 	var circulo = document.getElementById(idCirculo);
+
 	if(controlador.estado){
-		circulo.style.webkitAnimationPlayState = "paused";
+		if(controlador.navegador == "Trident" || controlador.navegador == "MSIE" || controlador.navegador == "Edge"){
+			if(idCirculo == "Circulo1"){
+				controlador.movimientoBola1 = false;
+			}
+			else if(idCirculo == "Circulo2"){
+				controlador.movimientoBola2 = false;
+			}
+		}
+		else{
+			circulo.style.webkitAnimationPlayState = "paused";
+		}
+
 		circulo.style.zIndex = 1;
 		if(idCirculo == "Circulo1"){
 			calcularPuntos("Circulo1", "Rectangulo1" , "Objetivo1");
@@ -228,16 +291,33 @@ function calcularTam(distancia, tamRectangulo){
 /**
  * @function sumaPuntos
  * @description Suma los puntos conseguidos entre las dos bolas
- * @return {Integer}
+ * @return {Integer} Puntos totales conseguidos
 */
 function sumaPuntos(){
-	if(document.getElementById("Circulo1").style.webkitAnimationPlayState == "paused" &amp;&amp; document.getElementById("Circulo2").style.webkitAnimationPlayState == "paused"){
-		crearReiniciar();
-
-		console.log("puntos1: " + puntosTotales.puntos1);
-		console.log("puntos2: " + puntosTotales.puntos2);
-		return (puntosTotales.puntos1 + puntosTotales.puntos2);
+	if(controlador.navegador == "Trident" || controlador.navegador == "MSIE" || controlador.navegador == "Edge"){
+		if(controlador.movimientoBola1 == false &amp;&amp; controlador.movimientoBola2 == false){
+			crearReiniciar();
+			console.log("Hola");
+			console.log("puntos1: " + puntosTotales.puntos1);
+			console.log("puntos2: " + puntosTotales.puntos2);
+			var puntos = puntosTotales.puntos1 + puntosTotales.puntos2;
+			document.getElementById("Puntos").innerHTML = "Puntos " + puntos;
+			return (puntos);
+		}
 	}
+	else{
+		if(document.getElementById("Circulo1").style.webkitAnimationPlayState == "paused" &amp;&amp; document.getElementById("Circulo2").style.webkitAnimationPlayState == "paused"){
+			crearReiniciar();
+	
+			console.log("puntos1: " + puntosTotales.puntos1);
+			console.log("puntos2: " + puntosTotales.puntos2);
+			var puntos = puntosTotales.puntos1 + puntosTotales.puntos2;
+			document.getElementById("Puntos").innerHTML = "Puntos " + puntos;
+			return (puntos);
+		}
+	}
+	
+	
 }
 
 /**
@@ -267,7 +347,6 @@ function crearReiniciar(){
  * @description Ejecuta el cronometro para empezar el test
 */
 function cronometro(){
-	console.log(window.innerWidth);
 	var imagen = document.getElementById("imagenCronometro");
 	var audio = new Audio("start.mp3");
 
@@ -299,6 +378,22 @@ function cronometro(){
 		empezar();
 	}
 }
+
+/**
+ * @function navegador
+ * @description Función que comprueba el navegador que se está usando
+ * @return {String} Navegador utilizado
+ */
+function navegador(){
+	var agente = navigator.userAgent;
+	var navegadores = ["Trident", "Edge", "MSIE", "Opera", "Chrome", "Firefox", "Safari"]; //Trident es el nombre de explorer 
+
+	for(i in navegadores){
+		if(agente.indexOf(navegadores[i]) != -1){
+			return navegadores[i];
+		}
+	}
+}
 </code></pre>
         </article>
     </section>
@@ -309,13 +404,13 @@ function cronometro(){
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="controlador.html">controlador</a></li><li><a href="puntosTotales.html">puntosTotales</a></li></ul><h3>Global</h3><ul><li><a href="global.html#animacionBola">animacionBola</a></li><li><a href="global.html#calcularPuntos">calcularPuntos</a></li><li><a href="global.html#calcularTam">calcularTam</a></li><li><a href="global.html#cambiarEstado">cambiarEstado</a></li><li><a href="global.html#configuracion">configuracion</a></li><li><a href="global.html#crearReiniciar">crearReiniciar</a></li><li><a href="global.html#cronometro">cronometro</a></li><li><a href="global.html#detenerBola">detenerBola</a></li><li><a href="global.html#eliminarEmpezar">eliminarEmpezar</a></li><li><a href="global.html#empezar">empezar</a></li><li><a href="global.html#modificarTamBola">modificarTamBola</a></li><li><a href="global.html#modificarTamRectangulo">modificarTamRectangulo</a></li><li><a href="global.html#moverObjetivos">moverObjetivos</a></li><li><a href="global.html#paraBolasTeclado">paraBolasTeclado</a></li><li><a href="global.html#sumaPuntos">sumaPuntos</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="controlador.html">controlador</a></li><li><a href="puntosTotales.html">puntosTotales</a></li></ul><h3>Global</h3><ul><li><a href="global.html#animacionBola">animacionBola</a></li><li><a href="global.html#calcularPuntos">calcularPuntos</a></li><li><a href="global.html#calcularTam">calcularTam</a></li><li><a href="global.html#cambiarEstado">cambiarEstado</a></li><li><a href="global.html#crearReiniciar">crearReiniciar</a></li><li><a href="global.html#cronometro">cronometro</a></li><li><a href="global.html#detenerBola">detenerBola</a></li><li><a href="global.html#eliminarEmpezar">eliminarEmpezar</a></li><li><a href="global.html#empezar">empezar</a></li><li><a href="global.html#moverObjetivos">moverObjetivos</a></li><li><a href="global.html#navegador">navegador</a></li><li><a href="global.html#paraBolasTeclado">paraBolasTeclado</a></li><li><a href="global.html#sumaPuntos">sumaPuntos</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Mar 06 2018 10:55:15 GMT+0100 (STD)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Apr 27 2018 21:21:06 GMT+0200 (DST)
 </footer>
 
 <script> prettyPrint(); </script>
